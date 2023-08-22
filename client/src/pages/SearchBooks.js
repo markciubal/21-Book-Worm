@@ -87,7 +87,7 @@ const SearchBooks = () => {
 
   return (
     <>
-      <div  style={{padding: '5%'}} className='text-light bg-dark pt-5'>
+      <div className='text-light bg-dark pt-5'>
         <Container>
           <h1>Search for Books!</h1>
           <Form onSubmit={handleFormSubmit}>
