@@ -9,10 +9,10 @@ const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3001;
-const server = new ApolloServer({
+const server = new ApolloServer(
   typeDefs,
   resolvers
-});
+);
 
 const app = express();
 
