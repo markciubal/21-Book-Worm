@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const { signToken } = require('../utils/auth');
 
 // addUser( username: String!, email: String!, password: String): Auth
 // login( email: String!, password: String! ): Auth
@@ -7,12 +8,55 @@ const { User } = require('../models');
 const resolvers = {
   Query: {
     me: async (_, args) => {
-      return User.find(User, { id: args.id });
+      let id = args.id; // Use args.id here
+      return User.find(User, { id });
     },
     users: async (_, args) => {
-      let id = args.id; // Use args.id here
-      return await User.find(User, { id });
+      return await User.find({});
     }
+  },
+  Mutation: {
+    addUser: async (_, { username, email, password }) => {
+     const user = await User.create({ username, email, password });
+     const token = await signToken(user);
+
+     return {user, token}
+    },
+    login: async (_, {email, password}) =>  {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw new AuthenticationError('Your username or password were incorrect.');
+      }
+      const correctPassword = await user.isCorrectPassword(password);
+
+      if (!correctPassword) {
+        throw new AuthenticationError('Your username or password were incorrect.');
+      }   
+
+      const token = signToken(user);
+
+      return { user, token};
+    },
+    saveBook: async (_, { authors, description, title, bookId, image, link }) => {
+      return user;
+    },
+    // addThought: async (parent, { thoughtText }, context) => {
+    //   if (context.user) {
+    //     const thought = await Thought.create({
+    //       thoughtText,
+    //       thoughtAuthor: context.user.username,
+    //     });
+
+    //     await User.findOneAndUpdate(
+    //       { _id: context.user._id },
+    //       { $addToSet: { thoughts: thought._id } }
+    //     );
+
+    //     return thought;
+    //   }
+    //   throw new AuthenticationError('You need to be logged in!');
+    // },
+
   }
 };
 

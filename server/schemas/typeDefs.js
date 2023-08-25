@@ -24,7 +24,7 @@ const typeDefs = gql`
 
   type Query {
     me( _id: ID ): User
-    user: User
+    users: [User]
   }
 
   type Mutation {
@@ -35,4 +35,4 @@ const typeDefs = gql`
   }
 `;
 
-module.exports = { typeDefs };
+module.exports = typeDefs;
